@@ -1,0 +1,23 @@
+version: "3.8"
+services:
+
+  catalog-service:
+    depends_on:
+      -  mariadb
+    image: "catalog-service"
+    container_name: "catalog-service"
+    ports:
+      -  9001:9001
+    environment:
+      -  BPL_JVM_THREAD_COUNT=50
+      -  SPRING_DATASOURCE_URL=jdbc:mariadb://mariadb/catalog_db
+      -  SPRING_PROFILES_ACTIVE=testdata
+
+  mariadb:
+    image: "mariadb:latest"
+    container_name: "mariadb"
+    ports:
+      -  3306:3306
+    environment:
+      - MARIADB_ROOT_PASSWORD=P@sser123
+      - MARIADB_DATABASE=catalog_db
