@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mariadb
+  labels:
+    db: mariadb
+spec:
+  selector:
+    matchLabels:
+      db: mariadb
+  template:
+    metadata:
+      labels:
+        db: mariadb
+    spec:
+      containers:
+        - name: mariadb
+          image: mariadb:latest
+          env:
+            - name: MARIADB_USER
+              value: user
+            - name: MARIADB_ROOT_PASSWORD
+              value: P@sser123
+            - name: MARIADB_PASSWORD
+              value: password
+            - name: MARIADB_DATABASE
+              value: catalog_db
+          resources:
+            requests:
+              cpu: 100m
+              memory: 60Mi
+            limits:
+              cpu: 200m
+              memory: 120Mi
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mariadb
+  labels:
+    db: mariadb
+spec:
+  type: ClusterIP
+  selector:
+    db: mariadb
+  ports:
+    - protocol: TCP
+      port: 3306
+      targetPort: 3306
